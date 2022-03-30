@@ -1,0 +1,12 @@
+export { default as Login } from './Login/Login';
+export { default as Signup } from './Signup/Signup';
+export { default as Homepage } from './Homepage/Homepage';
+export { default as SuperAdmin } from './SuperAdmin/SuperAdmin';
+export { default as Admin } from './Admin/Admin';
+export { default as Books } from './Books/Books';
+export { default as BookDetailsPage } from './BookDetailsPage/BookDetailsPage';
+export { default as Search } from './Search/Search';
+export { default as Journals } from './Journals/Journals';
+export { default as UploadBook } from './UploadBook/UploadBook';
+export { default as UploadArticle } from './UploadArticle/UploadArticle';
+export {default as DrawerContainer } from '../components/Drawer/Drawer';
