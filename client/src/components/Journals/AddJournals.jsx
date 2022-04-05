@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
-import { Button, Grid, Typography, Divider, Box, Input, Stack, FormControl, Select, MenuItem } from '@mui/material';
+import { Button, Grid, Typography, Divider, Box, Input, Stack, FormControl, Select, MenuItem, IconButton } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import axios from 'axios';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Compress from 'compress.js';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import booksLogo from '../../assets/Books.png'
 import InputGroup from '../InputGroup/InputGroup'
-
+import AddMainSubject from '../Modals/AddCategoryModal/AddMainSubject'
+import AddCategoryModal from '../Modals/AddCategoryModal/AddCategoryModal';
+import EventEmitter from '../../utils/EventEmitter';
 
 export default function AddJournals() {
     const compress = new Compress();
@@ -31,6 +34,7 @@ export default function AddJournals() {
         volume: "",
         issue: "",
         publicationStatus: "",
+        placeOfPublication: "",
         publicationDate: "",
         file: "",
 
@@ -81,7 +85,7 @@ export default function AddJournals() {
             console.log(res);
             alert("Data has been inserted")
             const addData = res.data.journals
-            history.push('/superadmin/journal/update-journals', {addData,Contributors})
+            history.push('/superadmin/journal/update-journals', { addData, Contributors })
         })
 
 
@@ -178,7 +182,7 @@ export default function AddJournals() {
                         </Typography>
                     </Grid>
                     <Grid item xs={12} mt={-2} p={2}>
-                        <Input placeholder="Name of book"
+                        <Input placeholder="Article"
                             onChange={(e) =>
                                 setAddJournals({
                                     ...addJournals,
@@ -199,7 +203,7 @@ export default function AddJournals() {
                         </Typography>
                     </Grid>
                     <Grid item xs={12} mt={-2} p={2}>
-                        <Input placeholder="Name of book"
+                        <Input placeholder="Journal"
                             onChange={(e) =>
                                 setAddJournals({
                                     ...addJournals,
@@ -250,7 +254,7 @@ export default function AddJournals() {
                                 lineHeight: '22px',
                                 color: '#0E5814',
                             }}>From Page</Typography>
-                            <Input placeholder="Name of book"
+                            <Input placeholder="from page"
                                 onChange={(e) =>
                                     setAddJournals({
                                         ...addJournals,
@@ -267,7 +271,7 @@ export default function AddJournals() {
                                 lineHeight: '22px',
                                 color: '#0E5814',
                             }}>To Page</Typography>
-                            <Input placeholder="Name of book"
+                            <Input placeholder="to page"
                                 onChange={(e) =>
                                     setAddJournals({
                                         ...addJournals,
@@ -285,7 +289,7 @@ export default function AddJournals() {
                                 lineHeight: '22px',
                                 color: '#0E5814',
                             }}>Volume</Typography>
-                            <Input placeholder="Name of book"
+                            <Input placeholder="volume"
                                 onChange={(e) =>
                                     setAddJournals({
                                         ...addJournals,
@@ -303,7 +307,7 @@ export default function AddJournals() {
                                 lineHeight: '22px',
                                 color: '#0E5814',
                             }}>Issue</Typography>
-                            <Input placeholder="Name of book"
+                            <Input placeholder="issue"
                                 onChange={(e) =>
                                     setAddJournals({
                                         ...addJournals,
@@ -312,34 +316,71 @@ export default function AddJournals() {
                                 }
                                 fullWidth />
                         </Grid>
-                        <Grid item xs={8} mt={2}>
-                            <Typography style={{
-                                fontFamily: 'Lato',
-                                fontStyle: 'normal',
-                                fontWeight: 500,
-                                fontSize: '18px',
-                                lineHeight: '22px',
-                                color: '#0E5814',
-                            }}>Publication Status</Typography>
-                            <FormControl variant="standard" fullWidth>
-                                <Select
-                                    labelId="demo-simple-select-standard-label"
-                                    id="demo-simple-select-standard"
+                        <Grid item xs={16}>
+                            <Grid container spacing={3} columns={16}>
+                                <Grid item xs={4} mt={2} mr={5}>
+                                    <Typography style={{
+                                        fontFamily: 'Lato',
+                                        fontStyle: 'normal',
+                                        fontWeight: 500,
+                                        fontSize: '18px',
+                                        lineHeight: '22px',
+                                        color: '#0E5814',
+                                    }}>Publication Status</Typography>
+                                    <FormControl variant="standard" style={{ width: 300 }}>
+                                        <Select
+                                            labelId="demo-simple-select-standard-label"
+                                            id="demo-simple-select-standard"
 
-                                    onChange={(e) =>
+                                            onChange={(e) =>
+                                                setAddJournals({
+                                                    ...addJournals,
+                                                    publicationStatus: e.target.value
+                                                })
+                                            }
+                                            sx={{ color: addJournals.publicationStatus === "PUBLISHED" ? 'green' : 'red' }}
+                                        >
+                                            <MenuItem value='PUBLISHED'>PUBLISHED</MenuItem>
+                                            <MenuItem value='IN-PRESS'>IN-PRESS</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={4} mt={2} ml={5} mr={5}>
+                                    <Typography style={{
+                                        fontFamily: 'Lato',
+                                        fontStyle: 'normal',
+                                        fontWeight: 500,
+                                        fontSize: '18px',
+                                        lineHeight: '22px',
+                                        color: '#0E5814',
+                                    }}>Place of Publication </Typography>
+                                    <Input placeholder="Place of Publication" style={{ width: 300 }} onChange={(e) =>
                                         setAddJournals({
                                             ...addJournals,
-                                            publicationStatus: e.target.value
+                                            placeOfPublication: e.target.value
                                         })
-                                    }
-                                    sx={{ color: addJournals.publicationStatus === "PUBLISHED" ? 'green' : 'red' }}
-                                >
-                                    <MenuItem value='PUBLISHED'>PUBLISHED</MenuItem>
-                                    <MenuItem value='IN-PRESS'>IN-PRESS</MenuItem>
-                                </Select>
-                            </FormControl>  
+                                    } />
+                                </Grid>
+                                <Grid item xs={4} mt={2} ml={5}>
+                                    <Typography style={{
+                                        fontFamily: 'Lato',
+                                        fontStyle: 'normal',
+                                        fontWeight: 500,
+                                        fontSize: '18px',
+                                        lineHeight: '22px',
+                                        color: '#0E5814',
+                                    }}>Publication Date</Typography>
+                                    <Input placeholder="Publication Date"
+                                        onChange={(e) =>
+                                            setAddJournals({
+                                                ...addJournals,
+                                                publicationDate: e.target.value
+                                            })
+                                        } style={{ width: 300 }} />
+                                </Grid>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={8} mt={2}>
+                        <Grid item xs={6}>
                             <Typography style={{
                                 fontFamily: 'Lato',
                                 fontStyle: 'normal',
@@ -347,14 +388,46 @@ export default function AddJournals() {
                                 fontSize: '18px',
                                 lineHeight: '22px',
                                 color: '#0E5814',
-                            }}>Publication Date</Typography>
-                            <Input placeholder="Name of book"
-                                onChange={(e) =>
-                                    setAddJournals({
-                                        ...addJournals,
-                                        publicationDate: e.target.value
-                                    })
-                                } fullWidth />
+                            }}>Main Subjects</Typography>
+
+                        </Grid>
+                        <Grid item xs={10}>
+
+                            <Grid item xs={4}>
+                                <Typography style={{
+                                    fontFamily: 'Lato',
+                                    fontStyle: 'normal',
+                                    fontWeight: 500,
+                                    fontSize: '18px',
+                                    lineHeight: '22px',
+                                    color: '#0E5814',
+                                }}>Sub-categories</Typography>
+                            </Grid>
+
+
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Input placeholder="AutoComplete ni Siya" fullWidth />
+                            <AddMainSubject />
+                            <IconButton onClick={() => EventEmitter.emit("addMainSubject", true)} style={{ float: 'right' }}><AddCircleIcon style={{ color: '#0E5814', width: '40px', height: '40px' }} /></IconButton>
+                        </Grid>
+                        <Grid item xs={10}>
+                            <Grid container spacing={2} column={16}>
+                                <Grid item xs={4}>
+                                    <Input placeholder="AutoComplete ni Siya" fullWidth />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Input placeholder="AutoComplete ni Siya" fullWidth />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Input placeholder="AutoComplete ni Siya" fullWidth />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    {/* <AddCategoryModal /> */}
+                                    <Input placeholder="AutoComplete ni Siya" fullWidth />
+                                    <IconButton onClick={() => EventEmitter.emit("addCategory", true)} style={{ float: 'right' }}><AddCircleIcon style={{ color: '#0E5814', width: '40px', height: '40px' }} /></IconButton>
+                                </Grid>
+                            </Grid>
                         </Grid>
                         <Grid item xs={16} mt={2}>
                             <Typography style={{

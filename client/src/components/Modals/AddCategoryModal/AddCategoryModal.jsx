@@ -196,11 +196,15 @@ export default function AddCategoryModal({ categoryLists, setCategoryLists }) {
                                 setCat(event.target.value)
                             }} sx={{ ml: 1, flex: 1 }}  onKeyPress={HandleOk}  placeholder="Add a category and press Enter"
                             />
+
+                            
                             {/* <AddIcon  style={{ color: '#0E5814' }} />
                             <InputBase value={cat} onChange={(event) => {
                                 setCat(event.target.value)
                             }} sx={{ ml: 1, flex: 1 }}  onKeyPress={HandleOk} placeholder="Add a category and press Enter"
                             /> */}
+
+
                         </Box>
                     </Grid>
                     <br />
@@ -222,7 +226,6 @@ export default function AddCategoryModal({ categoryLists, setCategoryLists }) {
                             </Grid><br />
                         </div>)}
                     </Grid>
-
                 </Grid>
             </Box>
         </Modal >

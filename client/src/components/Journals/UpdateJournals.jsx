@@ -33,11 +33,12 @@ export default function UpdateBooks(...props) {
         volume: "",
         issue: "",
         publicationStatus: "",
+        placeOfPublication: "",
         publicationDate: "",
         file: "",
     })
 
-     const [oldContributorsData, setOldContributorsData] = useState([]);
+    const [oldContributorsData, setOldContributorsData] = useState([]);
     useEffect(() => {
         if (journalData) {
             setJournalData(props[0].location.state.addData)
@@ -49,42 +50,42 @@ export default function UpdateBooks(...props) {
     // use for update and remove contributors modal
     useEffect(() => {
         const catchContributor = (contributor) => {
-            
+
             let listOfContributors = [];
 
-          for(let i=0; i< oldContributorsData.length; i+=1) {
+            for (let i = 0; i < oldContributorsData.length; i += 1) {
 
-              if(oldContributorsData[i].id === contributor.id ) {
+                if (oldContributorsData[i].id === contributor.id) {
 
-                listOfContributors = listOfContributors.concat(contributor);
+                    listOfContributors = listOfContributors.concat(contributor);
 
-              } else {
+                } else {
 
-                listOfContributors = listOfContributors.concat(oldContributorsData[i]);
-              }
-          }
-            
-          setOldContributorsData(listOfContributors);
-           
+                    listOfContributors = listOfContributors.concat(oldContributorsData[i]);
+                }
+            }
+
+            setOldContributorsData(listOfContributors);
+
         }
         const contributorModalListiner = EventEmitter.addListener("contributor", catchContributor)
 
         // remove contributor
 
         const removeContributor = (contributor) => {
-            
+
             let newcontributorsData = [];
 
-          for(let i=0; i< oldContributorsData.length; i+=1) {
+            for (let i = 0; i < oldContributorsData.length; i += 1) {
 
-              if(oldContributorsData[i].id !== contributor.id ) {
-                newcontributorsData = newcontributorsData.concat(oldContributorsData[i]);
-              } 
-          }
-            
-          setOldContributorsData(newcontributorsData);
-          
-           
+                if (oldContributorsData[i].id !== contributor.id) {
+                    newcontributorsData = newcontributorsData.concat(oldContributorsData[i]);
+                }
+            }
+
+            setOldContributorsData(newcontributorsData);
+
+
         }
         const removeContributorModalListiner = EventEmitter.addListener("removeContributor", removeContributor)
 
@@ -100,19 +101,19 @@ export default function UpdateBooks(...props) {
     const updateJournals = () => {
 
         let newcontributorsData = oldContributorsData;
-       
 
-        for(let i = 0; i < contributors.length; i+=1){
+
+        for (let i = 0; i < contributors.length; i += 1) {
             newcontributorsData = newcontributorsData.concat(contributors[i]);
         }
-        
+
 
         axios.put(`http://localhost:5000/journals/${journalData._id}`, { journalData, newcontributorsData }).then(
             res => console.log(res.data),
             err => console.log(err.message)
         )
 
-        
+
         alert("Data updated successfully")
         history.push('/superadmin/journals');
     }
@@ -271,7 +272,7 @@ export default function UpdateBooks(...props) {
 
                         <AdvanceModal />
                         {
-                            oldContributorsData.map((contributor) => 
+                            oldContributorsData.map((contributor) =>
                             (
                                 <Box sx={{
                                     width: '1000px'
@@ -369,31 +370,65 @@ export default function UpdateBooks(...props) {
                             })}
                         />
                     </Grid>
-                    <Grid item xs={8} mt={2} p={3}>
-                        <Typography style={{
-                            fontFamily: 'Lato',
-                            fontStyle: 'normal',
-                            fontWeight: 500,
-                            fontSize: '18px',
-                            lineHeight: '22px',
-                            color: '#0E5814',
-                        }}>Publication Status</Typography>
-                        <FormControl variant="standard" fullWidth>
-                            <Select
-                                labelId="demo-simple-select-standard-label"
-                                id="demo-simple-select-standard"
-                                value={journalData?.publicationStatus || ''}
-                                onChange={(e) => setJournalData({
-                                    ...journalData, publicationStatus: e.target.value
-                                })}
-                                sx={{ color: journalData.publicationStatus === "PUBLISHED" ? 'green' : 'red' }}
-                            >
-                                <MenuItem value='PUBLISHED'>PUBLISHED</MenuItem>
-                                <MenuItem value='IN-PRESS'>IN-PRESS</MenuItem>
-                            </Select>
-                        </FormControl>
+                    <Grid item xs={16}>
+                        <Grid container spacing={3} columns={16}>
+                            <Grid item xs={4} mt={2} mr={5} p={3}>
+                                <Typography style={{
+                                    fontFamily: 'Lato',
+                                    fontStyle: 'normal',
+                                    fontWeight: 500,
+                                    fontSize: '18px',
+                                    lineHeight: '22px',
+                                    color: '#0E5814',
+                                }}>Publication Status</Typography>
+                                <FormControl variant="standard" fullWidth style={{ width: 300 }}>
+                                    <Select
+                                        labelId="demo-simple-select-standard-label"
+                                        id="demo-simple-select-standard"
+                                        value={journalData?.publicationStatus || ''}
+                                        onChange={(e) => setJournalData({
+                                            ...journalData, publicationStatus: e.target.value
+                                        })}
+                                        sx={{ color: journalData.publicationStatus === "PUBLISHED" ? 'green' : 'red' }}
+                                    >
+                                        <MenuItem value='PUBLISHED'>PUBLISHED</MenuItem>
+                                        <MenuItem value='IN-PRESS'>IN-PRESS</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={4} mt={2} ml={5} mr={5} p={3}>
+                                <Typography style={{
+                                    fontFamily: 'Lato',
+                                    fontStyle: 'normal',
+                                    fontWeight: 500,
+                                    fontSize: '18px',
+                                    lineHeight: '22px',
+                                    color: '#0E5814',
+                                }}>Place of Publication</Typography>
+                                <Input placeholder="Name of book" fullWidth value={journalData?.placeOfPublication || ''}
+                                    onChange={(e) => setJournalData({
+                                        ...journalData, placeOfPublication: e.target.value
+                                    })}
+                                    style={{ width: 300 }} />
+                            </Grid>
+                            <Grid item xs={4} mt={2} ml={5} p={3}>
+                                <Typography style={{
+                                    fontFamily: 'Lato',
+                                    fontStyle: 'normal',
+                                    fontWeight: 500,
+                                    fontSize: '18px',
+                                    lineHeight: '22px',
+                                    color: '#0E5814',
+                                }}>Publication Date</Typography>
+                                <Input placeholder="Name of book" fullWidth value={journalData?.publicationDate || ''}
+                                    onChange={(e) => setJournalData({
+                                        ...journalData, publicationDate: e.target.value
+                                    })}
+                                    style={{ width: 300 }} />
+                            </Grid>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={8} mt={2} p={3}>
+                    <Grid item xs={6}>
                         <Typography style={{
                             fontFamily: 'Lato',
                             fontStyle: 'normal',
@@ -401,12 +436,17 @@ export default function UpdateBooks(...props) {
                             fontSize: '18px',
                             lineHeight: '22px',
                             color: '#0E5814',
-                        }}>Publication Date</Typography>
-                        <Input placeholder="Name of book" fullWidth value={journalData?.publicationDate || ''}
-                            onChange={(e) => setJournalData({
-                                ...journalData, publicationDate: e.target.value
-                            })}
-                        />
+                        }}>Main Subjects</Typography>
+                    </Grid>
+                    <Grid item xs={10}>
+                        <Typography style={{
+                            fontFamily: 'Lato',
+                            fontStyle: 'normal',
+                            fontWeight: 500,
+                            fontSize: '18px',
+                            lineHeight: '22px',
+                            color: '#0E5814',
+                        }}>Sub-categories</Typography>
                     </Grid>
                     <Grid item xs={16} mt={2} p={3}>
                         <Typography style={{

@@ -30,16 +30,21 @@ const useStyles = makeStyles({
 });
 export default function Books() {
   const [getBooks, setBooks] = useState([]);
+  const [contributors, setContributors] = useState([]);
   useEffect(() => {
     axios.get('http://localhost:5000/book').then((response) => {
-      console.log(response.data.books)
-      setBooks(response.data.books)
-    })
+      console.log(response.data.bookData[0])
+      setBooks(response.data.bookData[0])
+      setContributors(response.data.bookData[1]);
+
+    });
+
   }, [])
   const history = useHistory()
   const classes = useStyles()
   const [searchID, setSearchID] = useState('');
   const [open, setOpen] = React.useState(false);
+  const [count, setCount] = useState(0);
   const [state, setState] = React.useState({
     vertical: 'top',
     horizontal: 'right',
@@ -71,6 +76,31 @@ export default function Books() {
 
 
     }
+  }
+
+  const getContributors = (id) => {
+    console.log(id);
+    let firstAuthor;
+    // let counter = 0;
+    contributors.map((contributor)=>{
+      if(contributor._id === id) {
+        const numberOfContributors = contributor.contributors;
+        for(let index = numberOfContributors.length; index>=0; index -=1){
+          // if(numberOfContributors[index].type === 'author'){
+          //   counter +=1;
+          //   if(counter>1) {
+          //     // firstAuthor = `${contributor[index].Initials}   ${contributor[index].lastName}  etc`;
+          //     console.log('helloooooo?');
+          //     firstAuthor = contributor[index].initials;
+          //   }
+          // }
+        } 
+      }
+      
+      return firstAuthor;
+    })
+    console.log(firstAuthor);
+   
   }
 
   return (
@@ -177,7 +207,7 @@ export default function Books() {
                   <StyledTableRow style={{ background: 'white' }} hover>
                     <StyledTableCell component="th" scope="row">{row._id}</StyledTableCell>
                     <StyledTableCell align="center">{row.bookTitle}</StyledTableCell>
-                    <StyledTableCell align="center">GG</StyledTableCell>
+                    <StyledTableCell align="center">{getContributors(row.contributorId)}</StyledTableCell>
                     <StyledTableCell align="center">{row.bookEdition}</StyledTableCell>
                     <StyledTableCell align="center">{row.bookPublisherDate}</StyledTableCell>
                   </StyledTableRow>
