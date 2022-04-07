@@ -87,7 +87,7 @@
 //                     <Grid item xs={16} mt={-2}>
 //                         <Divider fullWidth style={{ border: '1px solid #B1B1B1' }} />
 //                     </Grid>
-                    
+
 //                 </Grid>
 //             </Box>
 //         </Modal >
@@ -119,7 +119,7 @@ const style = {
 
 export default function AddCategoryModal({ categoryLists, setCategoryLists }) {
     const [cat, setCat] = React.useState("");
-    const [all, setAll] = React.useState(categoryLists);
+    const [all, setAll] = React.useState(categoryLists);    
 
 
     const [openModal, setModalOpen] = useState(false);
@@ -142,22 +142,22 @@ export default function AddCategoryModal({ categoryLists, setCategoryLists }) {
     const HandleOk = (event) => {
         if (event.key === 'Enter') {
             //     event.preventDefault()
-        event.preventDefault();
-        const list = categoryLists;
-        list.push(cat)
-        setCat("");
-        setCategoryLists(list)
-        console.log(categoryLists);
-        // const allData = {list}
-        
+            event.preventDefault();
+            const list = categoryLists;
+            list.push(cat)
+            setCat("");
+            setCategoryLists(list)
+            console.log(categoryLists);
+            // const allData = {list}
+
+        }
     }
-    }
-   
-    const Remove =  (index) =>{
+
+    const Remove = (index) => {
         categoryLists.splice(index, 1)
         setModalOpen(false);
-      }
-    
+    }
+
 
 
     return (
@@ -179,7 +179,7 @@ export default function AddCategoryModal({ categoryLists, setCategoryLists }) {
                             fontSize: '20px',
                             lineHeight: '23px',
                             color: '#0E5814',
-                        }}>Manage Categories</Typography>
+                        }}>Manage Subjects</Typography>
                     </Grid>
                     <Grid item xs={16} mb={4}>
                         <Divider fullWidth style={{ border: '1px solid #B1B1B1' }} />
@@ -191,20 +191,16 @@ export default function AddCategoryModal({ categoryLists, setCategoryLists }) {
                             borderRadius: '3px'
                         }}
                         >
-                            <AddIcon  style={{ color: '#0E5814' }} />
+                            <AddIcon style={{ color: '#0E5814' }} />
                             <InputBase value={cat} onChange={(event) => {
                                 setCat(event.target.value)
-                            }} sx={{ ml: 1, flex: 1 }}  onKeyPress={HandleOk}  placeholder="Add a category and press Enter"
+                            }} sx={{ ml: 1, flex: 1 }} onKeyPress={HandleOk} placeholder="Add a category and press Enter"
                             />
-
-                            
                             {/* <AddIcon  style={{ color: '#0E5814' }} />
                             <InputBase value={cat} onChange={(event) => {
                                 setCat(event.target.value)
                             }} sx={{ ml: 1, flex: 1 }}  onKeyPress={HandleOk} placeholder="Add a category and press Enter"
                             /> */}
-
-
                         </Box>
                     </Grid>
                     <br />
@@ -216,16 +212,19 @@ export default function AddCategoryModal({ categoryLists, setCategoryLists }) {
                         <DeleteIcon style={{ marginLeft: '147px', color: '#0E5814' }} />
                     </Grid> */}
                     <Grid item xs={16} mt={-2}>
-                        {categoryLists.map((a,i) => <div> <Typography>{a}</Typography>
-                            <Grid item xs={16} mt={-2}>
-                                <DeleteIcon style={{ marginLeft: '95%', marginTop: '-3%', color: '#0E5814' }} onClick={() => Remove(i)} />
+                        {categoryLists.map((a, i) =>
+                            <div>
+                                <Typography>{a}</Typography>
+                                <Grid item xs={16} mt={-2}>
+                                    <DeleteIcon style={{ marginLeft: '95%', marginTop: '-3%', color: '#0E5814' }} onClick={() => Remove(i)} />
 
-                            </Grid>
-                            <Grid item xs={16} mt={-2}>
-                                <Divider fullWidth style={{ marginTop: '3%', border: '1px solid #B1B1B1' }} />
-                            </Grid><br />
-                        </div>)}
+                                </Grid>
+                                <Grid item xs={16} mt={-2}>
+                                    <Divider fullWidth style={{ marginTop: '3%', border: '1px solid #B1B1B1' }} />
+                                </Grid><br />
+                            </div>)}
                     </Grid>
+
                 </Grid>
             </Box>
         </Modal >

@@ -8,6 +8,7 @@ import logo from '../../assets/University-of-San-Carlos-Logo.png';
 
 export default function Signup() {
   const history = useHistory();
+
   const [addUsers, setUsers] = useState({
     userType: "user",
     userEmail: "",
@@ -15,12 +16,13 @@ export default function Signup() {
     userStatus: "UNVERIFIED",
 
   });
+  
   const createUsers = () => {
 
       axios.post('http://localhost:5000/users', addUsers).then((response) => {
-        console.log(response)
-
-
+        const userData = response.data.users
+        console.log(userData)
+        
       })
   };
   return (

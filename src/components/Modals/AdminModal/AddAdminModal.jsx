@@ -6,6 +6,7 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import styled from 'styled-components';
 import axios from 'axios'
 import uniqueId from 'react-id-generator';
+import {v4 as uuid} from 'uuid'; 
 import CloseIcon from '@mui/icons-material/Close';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EventEmitter from '../../../utils/EventEmitter'
@@ -47,7 +48,7 @@ export default function Addmin() {
 
   }, [])
   const [addAdmin, setAdmin] = useState({
-    schoolId: "",
+    schoolId: uuid(),
     userEmail: "",
     userType: "admin",
     userPassword: "",
@@ -58,8 +59,9 @@ export default function Addmin() {
   });
 
   const createAdmins = () => {
-    const adminID = uniqueId();
-    setAdmin({...addAdmin,schoolId:adminID})
+      setAdmin({...addAdmin,schoolId:uuid()})
+
+    console.log(addAdmin);
     axios.post('http://localhost:5000/users', addAdmin).then((response) => {
       
       setAdminRegistrationModalOpen(false);

@@ -33,9 +33,9 @@ export default function Books() {
   const [contributors, setContributors] = useState([]);
   useEffect(() => {
     axios.get('http://localhost:5000/book').then((response) => {
-      console.log(response.data.bookData[0])
-      setBooks(response.data.bookData[0])
-      setContributors(response.data.bookData[1]);
+      console.log(response.data.books)
+      setBooks(response.data.books)
+      // setContributors(response.data.bookData[1]);
 
     });
 
@@ -80,26 +80,64 @@ export default function Books() {
 
   const getContributors = (id) => {
     console.log(id);
-    let firstAuthor;
-    // let counter = 0;
-    contributors.map((contributor)=>{
-      if(contributor._id === id) {
-        const numberOfContributors = contributor.contributors;
-        for(let index = numberOfContributors.length; index>=0; index -=1){
-          // if(numberOfContributors[index].type === 'author'){
-          //   counter +=1;
-          //   if(counter>1) {
-          //     // firstAuthor = `${contributor[index].Initials}   ${contributor[index].lastName}  etc`;
-          //     console.log('helloooooo?');
-          //     firstAuthor = contributor[index].initials;
-          //   }
-          // }
-        } 
-      }
+    console.log(getBooks);
+    let firstContributor;
+    getBooks.map((book) => {
+      const contributorList = book.allBooks[0].contributors;
+      const contributorId = book.allBooks[0]._id;
+      console.log(contributorList);
+      console.log(contributorList[0]);
+      // if(contributorId === id){
+      //   let counter = 0;
+      //     for(let i = 0; i>= contributorList.length ; i-=1 ){
+      //       if(contributorList[i].type === 'author') {
+      //         counter+=1;
+      //         if(counter>1) {
+      //           firstContributor = `${contributorList[i].initials} ${contributorList[i].lastName}  et al`
+      //         }
+      //       }
+      //     }
+      // }
+
+
+      // if(contributorId === id){
+      //   let counter = 0;
+      //     for(let i = 0; i>= contributorList.length ; i-=1 ){
+      //       if(contributorList[i].type === 'author') {
+      //         counter+=1;
+      //         if(counter>1) {
+      //           firstContributor = `${contributorList[i].initials} ${contributorList[i].lastName}  et al`
+      //         }
+      //       }
+      //     }
+      // }
       
-      return firstAuthor;
+      console.log(firstContributor);
+
+      return id;
     })
-    console.log(firstAuthor);
+
+   
+    // let firstAuthor;
+    // // let counter = 0;
+    // contributors.map((contributor)=>{
+    //   if(contributor._id === id) {
+    //     const numberOfContributors = contributor.contributors;
+    //     for(let index = numberOfContributors.length; index>=0; index -=1){
+    //       // if(numberOfContributors[index].type === 'author'){
+    //       //   counter +=1;
+    //       //   if(counter>1) {
+    //       //     // firstAuthor = `${contributor[index].Initials}   ${contributor[index].lastName}  etc`;
+    //       //     console.log('helloooooo?');
+    //       //     firstAuthor = contributor[index].initials;
+    //       //   }
+    //       // }
+    //     } 
+    //   }
+      
+    //   return firstAuthor;
+    // })
+    // console.log(firstAuthor);
    
   }
 
@@ -207,7 +245,12 @@ export default function Books() {
                   <StyledTableRow style={{ background: 'white' }} hover>
                     <StyledTableCell component="th" scope="row">{row._id}</StyledTableCell>
                     <StyledTableCell align="center">{row.bookTitle}</StyledTableCell>
-                    <StyledTableCell align="center">{getContributors(row.contributorId)}</StyledTableCell>
+                    <StyledTableCell align="center">
+                      {
+                        getContributors(row.contributorId)
+                      }
+      
+                      </StyledTableCell>
                     <StyledTableCell align="center">{row.bookEdition}</StyledTableCell>
                     <StyledTableCell align="center">{row.bookPublisherDate}</StyledTableCell>
                   </StyledTableRow>

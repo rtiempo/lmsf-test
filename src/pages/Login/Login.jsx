@@ -8,30 +8,9 @@ import logo from '../../assets/University-of-San-Carlos-Logo.png';
 
 const Login = () => {
   const history = useHistory();
-  const [user, setUser] = useState({
-    email: '',
-    password: ''
-  });
-  const handleInputs = (e) => {
-    const { name, value } = e.target;
-    setUser({
-      ...user,
-      [name]: value
-    });
-  };
+ 
   const loginUser = () => {
-    axios.post('http://localhost:5000/login', user).then((res) => {
-
-      if(res.data.status === 404) {
-        alert(res.data.message);
-      };
-      if(res.data.status === 200) {
-        history.push('/homepage');
-        alert(res.data.message);
-      } else {
-        alert(res.data.message);
-      }
-    });
+    
   };
 
   return (
@@ -48,8 +27,7 @@ const Login = () => {
               margin: 'auto'
             }}
           >
-            <form method="POST">
-              {console.log('User', user)}
+         
               <Stack
                 spacing={2}
                 direction="column"
@@ -68,14 +46,12 @@ const Login = () => {
                 <LoginTextField
                   id="filled-basic"
                   name="email"
-                  value={user.email}
-                  onChange={handleInputs}
+                  
                   label="Email"
                 />
                 <LoginTextField
                   name="password"
-                  value={user.password}
-                  onChange={handleInputs}
+                 
                   id="filled-password-input"
                   type="password"
                   label="Password"
@@ -120,7 +96,6 @@ const Login = () => {
                   Sign up
                 </Typography>
               </Stack>
-            </form>
           </Box>
         </Grid>
         <Grid item xs={12} md={6}>

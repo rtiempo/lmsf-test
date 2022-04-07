@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Grid, Typography, Divider, Box, Input, InputBase, Stack, FormControl, Select, MenuItem } from '@mui/material';
+import { Button, Grid, Typography, Divider, Box, Input, InputBase, Stack, FormControl, Select, MenuItem, Autocomplete, TextField, Chip, IconButton } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import AuthorModal from '../Modals/ContributorModal/AuthorContributorModal'
 import OrganizationModal from '../Modals/ContributorModal/OrganizationContributorModal';
 import AdvanceModal from '../Modals/ContributorModal/AdvanceContributorModal';
 import booksLogo from '../../assets/Books.png'
 import InputGroup from '../InputGroup/InputGroup'
+import AddSubCategoryModal from '../Modals/AddSubCategoryModal/AddSubCategoryModal';
+import AddCategoryModal from '../Modals/AddCategoryModal/AddCategoryModal';
 import EventEmitter from "../../utils/EventEmitter";
 
 
 export default function UpdateBooks(...props) {
     console.log(props);
     // const [getContributors,setDataContributors] = useState([])
+    const [categoryLists, setCategoryLists] = useState([]);
+    const [subcategoryLists, setsubCategoryLists] = useState([]);
     const [contributors, setContributors] = useState([]);
     const handleAddContributor = () => {
         setContributors([...contributors, { id: uuid() }]);
@@ -101,21 +107,18 @@ export default function UpdateBooks(...props) {
     const updateJournals = () => {
 
         let newcontributorsData = oldContributorsData;
-
-
         for (let i = 0; i < contributors.length; i += 1) {
             newcontributorsData = newcontributorsData.concat(contributors[i]);
         }
-
-
         axios.put(`http://localhost:5000/journals/${journalData._id}`, { journalData, newcontributorsData }).then(
+            console.log(subcategoryLists),
             res => console.log(res.data),
             err => console.log(err.message)
         )
 
 
-        alert("Data updated successfully")
-        history.push('/superadmin/journals');
+        // alert("Data updated successfully")
+        // history.push('/superadmin/journals');
     }
 
 
@@ -446,7 +449,161 @@ export default function UpdateBooks(...props) {
                             fontSize: '18px',
                             lineHeight: '22px',
                             color: '#0E5814',
-                        }}>Sub-categories</Typography>
+                        }}>Sub-categories
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={16}>
+                        <Grid container spacing={3} columns={16}>
+                            <Grid item xs={4}>
+                                <Autocomplete
+                                    id="size-small-filled"
+                                    size="small"
+                                    options={categoryLists}
+                                    fullWidth
+                                    style={{
+                                        borderRadius: '4px 4px 4px 4px',
+                                        backgroundColor: '#9E9E9E'
+                                    }}
+                                    defaultValue="None"
+                                    renderTags={(value, getTagProps) =>
+                                        value.map((option, index) => (
+                                            <Chip
+                                                size="small"
+                                                {...getTagProps({ index })}
+                                            />
+                                        ))
+                                    }
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            InputProps={{ ...params.InputProps, disableUnderline: true }}
+                                            variant="filled"
+                                        />
+                                    )}
+                                />
+                                <AddCategoryModal categoryLists={categoryLists} setCategoryLists={setCategoryLists} />
+                                <IconButton style={{ cursor: 'pointer', float: 'right' }} >
+                                    <AddCircleIcon onClick={() => EventEmitter.emit("addCategory", true)} variant="contained" color="success" style={{ width: '30px', height: '30px' }} />
+                                </IconButton>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Grid container spacing={3} columns={16}>
+                                    <Grid item xs={4}>
+                                        <Autocomplete
+                                            id="size-small-filled"
+                                            size="small"
+                                            options={subcategoryLists}
+                                            style={{
+                                                borderRadius: '4px 4px 4px 4px',
+                                                backgroundColor: '#9E9E9E'
+                                            }}
+                                            defaultValue="None"
+                                            renderTags={(value, getTagProps) =>
+                                                value.map((option, index) => (
+                                                    <Chip
+                                                        size="small"
+                                                        {...getTagProps({ index })}
+                                                    />
+                                                ))
+                                            }
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    InputProps={{ ...params.InputProps, disableUnderline: true }}
+                                                    variant="filled"
+                                                />
+                                            )}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Autocomplete
+                                            id="size-small-filled"
+                                            size="small"
+                                            options={subcategoryLists}
+                                            style={{
+                                                borderRadius: '4px 4px 4px 4px',
+                                                backgroundColor: '#9E9E9E'
+                                            }}
+                                            defaultValue="None"
+                                            renderTags={(value, getTagProps) =>
+                                                value.map((option, index) => (
+                                                    <Chip
+                                                        size="small"
+                                                        {...getTagProps({ index })}
+                                                    />
+                                                ))
+                                            }
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    InputProps={{ ...params.InputProps, disableUnderline: true }}
+                                                    variant="filled"
+                                                />
+                                            )}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Autocomplete
+                                            id="size-small-filled"
+                                            size="small"
+                                            options={subcategoryLists}
+                                            style={{
+                                                borderRadius: '4px 4px 4px 4px',
+                                                backgroundColor: '#9E9E9E'
+                                            }}
+                                            defaultValue="None"
+                                            renderTags={(value, getTagProps) =>
+                                                value.map((option, index) => (
+                                                    <Chip
+                                                        size="small"
+                                                        {...getTagProps({ index })}
+                                                    />
+                                                ))
+                                            }
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    InputProps={{ ...params.InputProps, disableUnderline: true }}
+                                                    variant="filled"
+                                                />
+                                            )}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Autocomplete
+                                            id="size-small-filled"
+                                            size="small"
+                                            options={subcategoryLists}
+                                            style={{
+                                                borderRadius: '4px 4px 4px 4px',
+                                                backgroundColor: '#9E9E9E'
+                                            }}
+                                            defaultValue="None"
+                                            renderTags={(value, getTagProps) =>
+                                                value.map((option, index) => (
+                                                    <Chip
+                                                        size="small"
+                                                        {...getTagProps({ index })}
+                                                    />
+                                                ))
+                                            }
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    InputProps={{ ...params.InputProps, disableUnderline: true }}
+                                                    variant="filled"
+                                                />
+                                            )}
+                                        />
+                                        <AddSubCategoryModal subcategoryLists={subcategoryLists} setsubCategoryLists={setsubCategoryLists} />
+                                        <IconButton style={{ cursor: 'pointer', float: 'right' }}>
+                                            <AddCircleIcon onClick={() => EventEmitter.emit("addSubCategory", true)} variant="contained" color="success" style={{ width: '30px', height: '30px' }} />
+                                        </IconButton>
+                                    </Grid>
+                                </Grid>
+
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item xs={16} mt={2} p={3}>
                         <Typography style={{
@@ -456,7 +613,8 @@ export default function UpdateBooks(...props) {
                             fontSize: '18px',
                             lineHeight: '22px',
                             color: '#0E5814',
-                        }}>Add File</Typography>
+                        }}>Add File
+                        </Typography>
                         <Input type="file" fullWidth />
                     </Grid>
                     <Grid p={3} mt={3} container style={{ marginLeft: 'auto', marginRight: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

@@ -39,8 +39,15 @@ export default function Administrators() {
   useEffect(() => {
 
     axios.get('http://localhost:5000/users').then((response) => {
-
-      setAddAdmin(response.data.users)
+      let adminUser = [];
+      const data = response.data.users;
+      for(let i = 0; i<data.length; i+= 1) {
+        if(data[i].userType === 'admin'){
+          adminUser = adminUser.concat(data[i]);
+        }
+      }
+      console.log(adminUser)
+      setAddAdmin(adminUser)
 
     })
 
@@ -189,7 +196,7 @@ export default function Administrators() {
               <TableBody hover >
                 {getAddAdmin.map((row) => (
                   <StyledTableRow style={{ background: 'white' }} hover>
-                    <StyledTableCell component="th" scope="row">{row._id}</StyledTableCell>
+                    <StyledTableCell component="th" scope="row">{row.schoolId}</StyledTableCell>
                     <StyledTableCell align="center">{`${row.userFirstName} ${row.userLastName}`}</StyledTableCell>
                     <StyledTableCell align="center">{row.userEmail}</StyledTableCell>
                     <StyledTableCell align="center">{row.userRole}</StyledTableCell>

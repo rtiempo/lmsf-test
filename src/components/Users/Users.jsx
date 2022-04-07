@@ -1,4 +1,5 @@
-import React from 'react'
+import React , {useEffect, useState} from 'react'
+import axios from 'axios';
 import {Grid,Typography,Button,Divider,Box,InputBase,Table,TableBody,TableRow,TableContainer,TableHead,Paper} from '@mui/material'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -35,6 +36,21 @@ const useStyles = makeStyles({
 export default function Users(){
     const history= useHistory()
     const classes = useStyles()
+    const [getUser, setUsers] = useState([]);
+    useEffect(() => {
+      axios.get('http://localhost:5000/users').then((response) => {
+      let user = [];
+      const data = response.data.users;
+      for(let i = 0; i<data.length; i+= 1) {
+        if(data[i].userType === 'user'){
+          user = user.concat(data[i]);
+        }
+      }
+      setUsers(user)
+
+    })
+
+    }, [])
     return (
     <>
        <Grid container  rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 5}}>
@@ -134,16 +150,20 @@ export default function Users(){
                 </TableRow>
               </TableHead>
               <TableBody hover >
-                
+             {
+                getUser.map((users)=>(
                   <StyledTableRow style={{ background: 'white' }} hover>
-                    <StyledTableCell component="th" scope="row">19104903</StyledTableCell>
-                    <StyledTableCell align="center">Rehnan Ramil</StyledTableCell>
-                    <StyledTableCell align="center">University of San Carlos - TC</StyledTableCell>
-                    <StyledTableCell align="center">DCIS</StyledTableCell>
-                    <StyledTableCell align="center">CCT</StyledTableCell>
-                    <StyledTableCell align="center">3</StyledTableCell>
-                    <StyledTableCell align="center">Verified</StyledTableCell>
+                    <StyledTableCell component="th" scope="row">{users._id}</StyledTableCell>
+                    <StyledTableCell align="center">{`${users.userFirstName} ${users.userLastName}`}</StyledTableCell>
+                    <StyledTableCell align="center">{users.userDepartment}</StyledTableCell>
+                    <StyledTableCell align="center">{users.userDepartment}</StyledTableCell>
+                    <StyledTableCell align="center">{users.userCourse}</StyledTableCell>
+                    <StyledTableCell align="center">{users.userYear}</StyledTableCell>
+                    <StyledTableCell align="center" style={{color:users.userStatus === 'UNVERIFIED' ? 'red' : 'green' }}>{users.userStatus}</StyledTableCell>
                   </StyledTableRow>
+                ))
+             }
+                  
               </TableBody>
             </Table>
             {/* <TablePagination
